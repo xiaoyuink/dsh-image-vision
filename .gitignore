@@ -1,0 +1,15 @@
+# 依赖
+node_modules/
+.pnpm-store/
+
+# 日志与临时文件
+*.log
+.tmp/
+
+# 系统文件
+Thumbs.db
+.DS_Store
+
+# 编辑器
+.vscode/
+.idea/

@@ -1,0 +1,4 @@
+# dsh-image-vision bundle patch: mount the plugin row.
+- insert:
+    - id: dsh-image-vision
+      name: dsh-image-vision
