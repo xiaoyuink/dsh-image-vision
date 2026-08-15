@@ -23,7 +23,7 @@
 ### 从 GitHub 安装
 
 ```bash
-git clone https://github.com/<你的用户名>/dsh-image-vision.git
+git clone https://github.com/xiaoyuink/dsh-image-vision.git
 cd dsh-image-vision && pnpm install   # 安装插件自身的依赖
 dsh plugin --profile web add <插件目录绝对路径>
 ```
