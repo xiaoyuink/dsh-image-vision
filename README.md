@@ -68,3 +68,11 @@ image-vision:
 - **当前模型**：通过 `agentDefaultModel.currentSelection()` 取当前 provider/model，再用 `llm.resolveModelInfo()` 判断 `inputModalities` 是否含 `image`。
 - **模型发现**：调用端点 `/models`（OpenAI）或 `/v1/models`（Anthropic），按模型名关键词（vision / vl / 4o / omni / claude / gemini / qwen-vl / glm-4v / internvl / llava / pixtral / minicpm-v / mimo 等）猜测是否识图。
 - **模型实测（最可靠）**：设置页「检测」按钮 → `POST /api/dsh-image-vision/test-model`，用内置测试图真实调用一次（Anthropic/OpenAI 协议按端点自动选择），成功返回识别文本；失败时从错误信息判断是否「不支持图片输入」并明确提示。
+
+## 输入框图片输入（v1.1 新增）
+
+- 安装本插件后，DSH 对话框输入框工具行会出现「📎 添加图片」按钮，也可直接在输入框**粘贴**（Ctrl+V）或**拖拽**图片文件（支持 png/jpeg/webp/gif，单张 ≤ 20MB）。
+- 图片会上传到 ~/.dsh/image-vision/drafts/ 并在输入框插入图片引用标记（如 ![图片](C:/Users/.../drafts/iv-xxx.png)）。
+- 发送后，模型按插件注入的系统规则自动调用 image_vision 工具识别图片并回复内容。
+- 无论当前主模型是否识图都可用：主模型识图则由主模型直接分析，不识图则走插件配置的视觉模型。
+- 草稿图片超过 7 天自动清理。
