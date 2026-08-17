@@ -8,8 +8,8 @@
 
 - 注册 **4 个识图工具**：`image_vision` / `image_vision_ocr` / `image_vision_ground` / `image_vision_crop`。
 - 内置 **7 个专业预设**：病理 / 细胞 / 解剖 / 统计图 / 组合大图 / 临床 / 通用。
-- **输入框原生图片**：粘贴 / 上传 / 拖拽图片，自动插入图片引用标记，发送后自动识图。
-- **「+ 自动识图」视觉组**：为每个文本大模型自动注册一个带 👁 视觉组（「X + 视觉」），选它即可让原本不识图的模型接收图片。
+- **输入框原生图片**：粘贴 / 上传 / 拖拽图片，发送后自动识图。
+- **文本模型直接发图**：粘贴/上传/拖拽图片后发送，图片自动写入 DSH 附件存储（永久），消息区渲染缩略图（点击看大图），模型自动调用识图工具识别；**无需切换模型、模型选择器保持简洁**（「+ 自动识图」👁 视觉组默认关闭）。
 - **可视化设置页**：多供应商管理、厂商模板、模型发现、模型实测、余额查询、总开关。
 - 支持 OpenAI 兼容、Anthropic 兼容、Qwen-Omni Realtime、OVHcloud 匿名免费视觉层等协议。
 
@@ -26,7 +26,7 @@
 
 | 参数 | 必填 | 说明 |
 | --- | --- | --- |
-| `images` | 是 | 图片引用列表；支持本地绝对路径（`C:/.../x.jpg`）、草稿短名（`i/iv-xxx.jpg`）、草稿 URL |
+| `images` | 是 | 图片引用列表；支持本地绝对路径（`C:/.../x.jpg`）、草稿短名（`i/iv-xxx.jpg`）、草稿 URL、附件存储引用（`/api/dsh-image-vision/raw/<sha256>?m=..&b=..&w=..&h=..`，整段 URL 传入，永久有效） |
 | `preset` | 否 | 预设名，见下表；缺省 `general` |
 | `prompt` | 否 | 自定义提示词；提供后替换预设提示词（仍保留预设的参数默认值） |
 
@@ -70,10 +70,11 @@
 ## 四、「+ 自动识图」视觉组（默认关闭）
 
 > ⚠️ **v2.3+ 默认不再注册视觉组**：模型选择器保持简洁（不出现带 👁 的选项）。
-> 图片发送改由 **client 发送层 hook** 承担——带图发送时把草稿图片上传到插件草稿目录，把消息
-> 改写为 `![图片](i/iv-xxx.jpg)` 纯文本引用再发出（文本模型同样可用，图片字节不进会话；
-> `image_vision_ground → image_vision_crop → image_vision_ocr` 像素精读链路不受影响）。
-> 若仍需要原生"选模型即带图"的旧体验，可在设置配置文件把 `visionGroup: true` 开启。
+> 图片发送改由 **client 发送层 hook** 承担——带图发送时把图片写入 DSH 附件存储，把消息
+> 改写为附件引用 `![图片](/api/dsh-image-vision/raw/<sha256>?m=..&b=..&w=..&h=..)` 纯文本再发出
+> （文本模型同样可用，图片字节不进会话、引用永久有效；`image_vision_ground → image_vision_crop →
+> image_vision_ocr` 像素精读链路不受影响）。
+> 若仍需要原生"选模型即带图"的旧体验，可在配置里把 `visionGroup: true` 开启。
 
 - 插件为 DSH 装配的**每个文本厂商**自动注册一个视觉组「X + 视觉」（排在对应厂商组后面），模型条目名带 👁（如 `deepseek-v4-flash👁`），并声明支持图片输入。
 - 在模型选择器选中该视觉组后，粘贴/上传的图片可通过 DSH 发送准入：**可预览、可发送、可点开大图**。
@@ -132,6 +133,7 @@ dsh plugin --profile web add <插件目录绝对路径>
 ```yaml
 image-vision:
   enabled: true               # 总开关
+  visionGroup: false          # 是否在模型选择器注册「+ 自动识图」👁 视觉组（默认 false，保持简洁）
   providers:
     - id: legacy              # 供应商唯一 id（自动生成）
       name: 默认供应商
@@ -153,10 +155,10 @@ dsh-image-vision/
 ├── cordis.patch.yml      # insert 插件行（挂载 bundle）
 ├── assets/
 │   └── test-image.jpg    # 内置测试图（「检测」按钮实测识图用）
-├── drafts/               # 运行时草稿目录（图片临时存放，已 gitignore）
+├── drafts/               # 运行时物化缓存目录（附件引用解析时临时落盘，20 分钟过期重建；已 gitignore）
 └── lib/
-    ├── index.js          # host 半：工具 + settings namespace + 路由 + 视觉组 + 草稿
-    ├── client.js         # client 半：设置页 UI + 输入框按钮/视觉模型选择器
+    ├── index.js          # host 半：工具 + settings namespace + 路由 + 附件存储 + 视觉组（可选）+ 草稿缓存
+    ├── client.js         # client 半：设置页 UI + 输入框按钮/视觉模型选择器 + 发送 hook + 消息区图片渲染
     └── presets.js        # 7 个预设提示词（移植自 image-vision skill）
 ```
 
