@@ -1,6 +1,6 @@
 {
   "name": "dsh-image-vision",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "图片识别插件：自动判断当前模型是否具备视觉能力，有则用当前模型并按插件预设提示词分析，无则调用插件配置的视觉模型。内置「+ 自动识图」模型路由，对话框可直接粘贴/上传图片（原生流程），对话中显示图片，模型自动调用 image_vision 识别。",
   "type": "module",
   "main": "./lib/index.js",

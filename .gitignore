@@ -6,6 +6,9 @@ node_modules/
 *.log
 .tmp/
 
+# 图片草稿临时存放目录（运行时生成）
+drafts/
+
 # 系统文件
 Thumbs.db
 .DS_Store
