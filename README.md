@@ -147,6 +147,12 @@ image-vision:
 
 旧版单配置（顶层 `apiBaseUrl` / `apiKey` / `model`）读取时自动迁移为 `providers[0]`；设置页每次保存都会持久化到该文件。
 
+### API Key 安全（v2.3.1）
+
+- 设置页 API Key 输入框为**密码框**，保存后**不再回显**（`GET /api/dsh-image-vision/config` 返回 `********` 占位）；**留空保存 = 保留原 Key**，不覆盖。
+- 推荐用 **环境变量引用** 替代明文：把 `apiKey` 写成 `env:VISION_API_KEY`，插件调用时从进程环境变量读取，`settings.yaml` 与配置文件里**不落明文**。
+- 历史明文 Key 已写在 `~/.dsh/settings.yaml`；如需更安全可改为 `env:...` 引用后删除原明文。
+
 ## 目录结构
 
 ```
