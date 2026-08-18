@@ -1,4 +1,4 @@
-# dsh-image-vision
+# @xiaoyuink/dsh-image-vision
 
 图片识别插件（[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)，简称 DSH）。将 `image-vision` skill 移植为可安装的 DSH 插件。
 
@@ -111,7 +111,7 @@ dsh plugin --profile web add <插件目录绝对路径>
 
 ### 从 GitHub Release 安装
 
-在 [Releases](https://github.com/xiaoyuink/dsh-image-vision/releases) 下载 `dsh-image-vision-<版本>.tgz`，解压后按上述方式 `add` 解压得到的 `package/` 目录。
+在 [Releases](https://github.com/xiaoyuink/dsh-image-vision/releases) 下载 `xiaoyuink-dsh-image-vision-<版本>.tgz`，解压后按上述方式 `add` 解压得到的 `package/` 目录。
 
 ## 配置数据结构（settings 的 `image-vision` 段）
 

@@ -16,3 +16,9 @@ Thumbs.db
 # 编辑器
 .vscode/
 .idea/
+
+# 发布产物（npm pack 输出）
+package/
+
+# npm 锁文件（项目使用 pnpm）
+package-lock.json
