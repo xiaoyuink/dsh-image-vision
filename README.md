@@ -9,7 +9,7 @@
 - 注册 **4 个识图工具**：`image_vision` / `image_vision_ocr` / `image_vision_ground` / `image_vision_crop`。
 - 内置 **7 个专业预设**：病理 / 细胞 / 解剖 / 统计图 / 组合大图 / 临床 / 通用。
 - **输入框原生图片**：粘贴 / 上传 / 拖拽图片，发送后自动识图。
-- **文本模型直接发图**：粘贴/上传/拖拽图片后发送，图片自动写入 DSH 附件存储（永久），消息区渲染缩略图（点击看大图），模型自动调用识图工具识别；**无需切换模型、模型选择器保持简洁**（「+ 自动识图」👁 视觉组默认关闭）。
+- **文本模型直接发图**：粘贴/上传/拖拽图片后发送，图片自动写入 DSH 附件存储（永久），消息区渲染缩略图（点击看大图），模型自动调用识图工具识别；**无需切换模型、模型选择器保持简洁**。
 - **可视化设置页**：多供应商管理、厂商模板、模型发现、模型实测、余额查询、总开关。
 - 支持 OpenAI 兼容、Anthropic 兼容、Qwen-Omni Realtime、OVHcloud 匿名免费视觉层等协议。
 
@@ -67,22 +67,7 @@
 - 无论当前模型是否识图都可用：识图则主模型直接分析，不识图则走插件视觉模型。
 - 图片字节不进会话记录；附件对象位于 `~/.dsh/attachments/v1/objects/`（磁盘只增不减，如需清理需手动删目录；`_preview` 子目录可放带扩展名的预览副本）。
 
-## 四、「+ 自动识图」视觉组（默认关闭）
-
-> ⚠️ **v2.3+ 默认不再注册视觉组**：模型选择器保持简洁（不出现带 👁 的选项）。
-> 图片发送改由 **client 发送层 hook** 承担——带图发送时把图片写入 DSH 附件存储，把消息
-> 改写为附件引用 `![图片](/api/dsh-image-vision/raw/<sha256>?m=..&b=..&w=..&h=..)` 纯文本再发出
-> （文本模型同样可用，图片字节不进会话、引用永久有效；`image_vision_ground → image_vision_crop →
-> image_vision_ocr` 像素精读链路不受影响）。
-> 若仍需要原生"选模型即带图"的旧体验，可在配置里把 `visionGroup: true` 开启。
-
-- 插件为 DSH 装配的**每个文本厂商**自动注册一个视觉组「X + 视觉」（排在对应厂商组后面），模型条目名带 👁（如 `deepseek-v4-flash👁`），并声明支持图片输入。
-- 在模型选择器选中该视觉组后，粘贴/上传的图片可通过 DSH 发送准入：**可预览、可发送、可点开大图**。
-- 发送时图片 block 被落盘改写为 `![图片](i/xxx)` 标记，再委托原文本模型；模型按系统规则调用 `image_vision` 识别。
-- 仅当插件配置了视觉模型（且总开关开启）且 `visionGroup: true` 时才注册；未配置时选择器保持干净，不出现 👁 模型。
-- 视觉组跟随 llm provider 注册表**热增/热减**（增删厂商即时反映）。
-
-## 五、识图能力判断（三层）
+## 四、识图能力判断（三层）
 
 1. **当前模型**：通过 `agentDefaultModel.currentSelection()` 取当前 provider/model，再用 `llm.resolveModelInfo()` 判断 `inputModalities` 是否含 `image`。
 2. **模型发现**：调用端点 `/models`（OpenAI）或 `/v1/models`（Anthropic），按模型名关键词（vision / vl / 4o / omni / claude / gemini / qwen-vl / glm-4v / internvl / llava / pixtral / minicpm-v / mimo 等）+ 显式覆盖表猜测是否识图；明确的非视觉模型（tts / asr / whisper / embedding / rerank 等）直接排除。
@@ -133,7 +118,6 @@ dsh plugin --profile web add <插件目录绝对路径>
 ```yaml
 image-vision:
   enabled: true               # 总开关
-  visionGroup: false          # 是否在模型选择器注册「+ 自动识图」👁 视觉组（默认 false，保持简洁）
   providers:
     - id: legacy              # 供应商唯一 id（自动生成）
       name: 默认供应商
@@ -163,7 +147,7 @@ dsh-image-vision/
 │   └── test-image.jpg    # 内置测试图（「检测」按钮实测识图用）
 ├── drafts/               # 运行时物化缓存目录（附件引用解析时临时落盘，20 分钟过期重建；已 gitignore）
 └── lib/
-    ├── index.js          # host 半：工具 + settings namespace + 路由 + 附件存储 + 视觉组（可选）+ 草稿缓存
+    ├── index.js          # host 半：工具 + settings namespace + 路由 + 附件存储 + 草稿缓存
     ├── client.js         # client 半：设置页 UI + 输入框按钮/视觉模型选择器 + 发送 hook + 消息区图片渲染
     └── presets.js        # 7 个预设提示词（移植自 image-vision skill）
 ```
@@ -186,7 +170,8 @@ dsh-image-vision/
 
 ## 更新记录
 
-- **v2.3.0**：发送链路重构——图片改存 DSH 附件存储（永久、内容寻址），消息改写为附件引用并渲染缩略图；新增 `attach` / `raw` / `current-model-vision` 路由与附件引用解析（精读链路 ground/crop/ocr 直接可用）；「+ 自动识图」视觉组默认关闭（`visionGroup` 配置，模型选择器保持简洁）；总开关关闭时拦截粘贴图片；修复拖拽浮层卡死与预览渲染等若干问题。
+- **v2.3.1**：API Key 安全增强（回显脱敏 + `env:` 环境变量引用 + 留空不改）；彻底移除「+ 自动识图」视觉组（不再在模型选择器注册 👁 模型条目，模型选择器保持简洁，由发送层 hook 独立承担图片发送）。
+- **v2.3.0**：发送链路重构——图片改存 DSH 附件存储（永久、内容寻址），消息改写为附件引用并渲染缩略图；新增 `attach` / `raw` / `current-model-vision` 路由与附件引用解析（精读链路 ground/crop/ocr 直接可用）；总开关关闭时拦截粘贴图片；修复拖拽浮层卡死与预览渲染等若干问题。
 - **v2.2.1**：草稿图片临时目录迁移至插件目录本体（`dsh-image-vision/drafts`）。
 - **v2.2.0**：新增总开关与草稿 20 分钟过期清理，完善视觉模型覆盖与设置页 UI。
 - **v2.1.0**：新增像素级工具（`image_vision_ocr` / `image_vision_ground` / `image_vision_crop`）+ OVH 免费视觉层。
