@@ -28,7 +28,8 @@ cd ~/.dsh/plugin
 
 # 克隆仓库
 git clone https://github.com/xiaoyuink/dsh-image-vision.git
-cd dsh-image-vision && pnpm install
+cd dsh-image-vision
+pnpm install
 
 # 添加到 DSH 配置
 dsh plugin --profile web add "$(pwd)"
