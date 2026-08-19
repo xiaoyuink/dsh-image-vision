@@ -19,7 +19,27 @@
 
 ## 快速上手（如何使用）
 
-安装并重启 DSH 后，按以下步骤开始使用：
+### 安装插件
+
+```bash
+# 建议在 ~/.dsh 下新建 plugin 目录，统一存放插件本体
+mkdir -p ~/.dsh/plugin
+cd ~/.dsh/plugin
+
+# 克隆仓库
+git clone https://github.com/xiaoyuink/dsh-image-vision.git
+cd dsh-image-vision && pnpm install
+
+# 添加到 DSH 配置
+dsh plugin --profile web add "$(pwd)"
+
+# 重启 DSH Web 生效
+# （dsh plugin add 使用 link: 协议，代码改动后重启即可，无需重新安装）
+```
+
+> **💡 关于插件存放位置**：建议将插件本体放在 `~/.dsh/plugin/` 目录下统一管理，也可以根据你的喜好放在任意位置，`dsh plugin add` 时指向该路径即可。
+
+安装完成后重启 `dsh web`，然后按以下步骤开始使用：
 
 ### 1️⃣ 开启插件
 
