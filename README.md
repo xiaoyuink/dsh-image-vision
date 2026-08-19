@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://github.com/xiaoyuink/dsh-image-vision/raw/main/assets/demo.gif" alt="dsh-image-vision 演示" width="800">
   <br>
-  <em>📹 粘贴/拖拽图片 → 模型自动识图 → 4 件套工具精读（点击上图查看完整演示）</em>
+  <em>📹 粘贴/拖拽图片 → 模型自动识图 → 4 件套工具精读</em>
 </p>
 
 核心思想：**让任意接入 DSH 的大模型都能识图**——无论当前模型本身是否支持视觉。模型能识图就直接交给它（并按专业预设提示词分析），不能识图就自动转给插件配置的视觉模型，对使用者透明。
