@@ -156,7 +156,7 @@
 2. **模型发现**：调用端点 `/models`（OpenAI）或 `/v1/models`（Anthropic），按模型名关键词（vision / vl / 4o / omni / claude / gemini / qwen-vl / glm-4v / internvl / llava / pixtral / minicpm-v / mimo 等）+ 显式覆盖表猜测是否识图；明确的非视觉模型（tts / asr / whisper / embedding / rerank 等）直接排除。
 3. **模型实测（最可靠）**：设置页「检测」按钮 → 用内置测试图真实调用一次，成功则返回识别文本，失败则判断是否「不支持图片输入」并明确提示。
 
-## 六、设置页面（DSH 设置 → 识图插件）
+## 五、设置页面（DSH 设置 → 识图插件）
 
 仿 DSH「设置-模型」界面，功能包括：
 
@@ -170,7 +170,7 @@
 - **余额查询**：供应商卡片端点行的「余额」框，挂载时及端点/Key 变化后自动查询，点击刷新；默认按厂商判断货币（国内 ¥ / 美元 $ / one-api「额度」）。
 - **内嵌添加模型**：供应商卡片内「+ 添加模型」就地展开面板（获取列表/勾选/手动输入）。
 
-## 七、视觉模型协议
+## 六、视觉模型协议
 
 - **OpenAI 兼容**：`chat.completions`（图片以 data URL 传入）。
 - **Anthropic 兼容**：Messages API（图片以 base64 image block 传入；按端点自动选择协议）。
