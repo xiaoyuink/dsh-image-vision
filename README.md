@@ -260,6 +260,10 @@ dsh-image-vision/
 - **v2.1.0**：新增像素级工具（`image_vision_ocr` / `image_vision_ground` / `image_vision_crop`）+ OVH 免费视觉层。
 - **v2.0.0**：基于 twin 路由的原生图片输入链路 + UI 全面升级。
 
+## 致谢
+
+- **[ysr666/dsh-vision-router](https://github.com/ysr666/dsh-vision-router)** — 本插件的视觉路由链路（多供应商视觉模型分发与降级策略）参考了其设计思路，在此表示感谢。
+
 ## License
 
 [MIT](./package.json)
