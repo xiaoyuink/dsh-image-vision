@@ -262,7 +262,7 @@ dsh-image-vision/
 
 ## 致谢
 
-- **[ysr666/dsh-vision-router](https://github.com/ysr666/dsh-vision-router)** — 本插件的视觉路由链路（多供应商视觉模型分发与降级策略）参考了其设计思路，在此表示感谢。
+- **[ysr666/dsh-vision-router](https://github.com/ysr666/dsh-vision-router)** — 本插件的视觉工具链（`image_vision` / `image_vision_ocr` / `image_vision_ground` / `image_vision_crop` 四件套）参考了其设计思路，在此表示感谢。
 
 ## License
 
