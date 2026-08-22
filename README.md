@@ -32,13 +32,16 @@
 
 ### 安装插件
 
-**方式一：一条命令安装 GitHub Release（推荐，无需源码/依赖）**
+**方式一：一条命令安装最新 Release（推荐，无需源码/依赖，始终是最新版）**
 
 ```bash
-dsh plugin --profile web add https://github.com/xiaoyuink/dsh-image-vision/releases/download/v2.7.0/xiaoyuink-dsh-image-vision-2.7.0.tgz
+dsh plugin --profile web add https://github.com/xiaoyuink/dsh-image-vision/releases/latest/download/xiaoyuink-dsh-image-vision-latest.tgz
 ```
 
-> 装好后想升级也很简单：打开 DSH **设置 → 识图插件**，插件会自动检测 GitHub 上的新版本并**一键更新**，无需再手动改 URL 重装。
+> 上面的 URL **永远指向最新版本**（`/releases/latest/` 自动重定向到最新 Release 的资产），无需改版本号。若想安装指定版本，把 `latest` 换成版本号即可，例如：
+> `.../releases/download/v2.7.2/xiaoyuink-dsh-image-vision-2.7.2.tgz`
+>
+> 升级更简单：打开 DSH **设置 → 识图插件**，插件会自动检测 GitHub 新版本并**一键更新**，无需手动改 URL 重装。
 
 **方式二：GitHub 仓库开发模式（`link:`，代码改动重启即生效，适合二次开发）**
 
@@ -232,11 +235,13 @@ dsh plugin --profile web add "$(pwd)"
 
 ## 安装
 
-### 方式一：一条命令安装 GitHub Release（推荐）
+### 方式一：一条命令安装最新 Release（推荐）
 
 ```bash
-dsh plugin --profile web add https://github.com/xiaoyuink/dsh-image-vision/releases/download/v2.7.0/xiaoyuink-dsh-image-vision-2.7.0.tgz
+dsh plugin --profile web add https://github.com/xiaoyuink/dsh-image-vision/releases/latest/download/xiaoyuink-dsh-image-vision-latest.tgz
 ```
+
+> URL 始终指向最新版本（`/releases/latest/` 自动重定向到最新 Release 资产）。
 
 安装后重启 `dsh web` 生效（host 在启动时加载）；后续升级可在设置页**一键在线更新**，无需手动重装。
 
@@ -307,6 +312,11 @@ dsh-image-vision/
 
 ## 更新记录
 
+> **给维护者**：发布 Release 时，除 `xiaoyuink-dsh-image-vision-<版本>.tgz` 外，请再上传一份固定名资产 `xiaoyuink-dsh-image-vision-latest.tgz`（内容相同），保证首页「一条命令安装最新 Release」的 `releases/latest/download/` 链接始终指向最新的包。
+
+- **v2.7.2**：修复设置页版本号显示错误——版本号改为从 `package.json` 动态读取（服务端），客户端设置页以 `/config` 返回的 `version` 为准显示，硬编码仅兜底，发布版本不再失配。
+- **v2.7.1**：同步 README 安装说明（一条命令安装 GitHub Release，推荐）。
+- **v2.7.0**：统一图片预处理 + 消息关键词自动预设——TIF/SVG 由内置 sharp 自动转 PNG；AI/EPS/PS 用 Python（PyMuPDF+Ghostscript）转换（缺依赖时征求同意，可选自动安装）；主模型能识图则原生发送+注入预设，不识图自动走插件视觉模型；修复非视觉模型发送图片后输入框残留问题。
 - **v2.6.1**：设置页标题行右上角显示当前版本号（小字），检测到 GitHub 新版本时在标题行提示「有新版本」并提供一键更新。
 - **v2.6.0**：新增在线更新——打开设置页自动检查 GitHub Release 新版本，检测到新版本即提示「在线更新」一键安装（从 GitHub Release tarball 安装，无需 npm 发布），重启后生效。
 - **v2.5.0**：设置页编辑供应商时「获取模型列表」支持已存密钥自动回查（修复 `cred:REF` 未解析导致 401）；模型发现返回真实失败原因（`reason` 字段），内置候选提示不再误报「请填写 API Key」；候选模型支持人工纠错（⇄ 按钮翻转视觉/非视觉判定）；候选列表新增搜索框（不区分大小写）与双级排序（按名称/按是否视觉，各可升/降序）；供应商卡片与卡片内模型支持拖拽排序（≡ 手柄，松手自动保存）；预设厂商下拉对已添加厂商置灰标注「已添加」防重复。
