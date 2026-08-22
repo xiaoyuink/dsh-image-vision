@@ -32,6 +32,16 @@
 
 ### 安装插件
 
+**方式一：一条命令安装 GitHub Release（推荐，无需源码/依赖）**
+
+```bash
+dsh plugin --profile web add https://github.com/xiaoyuink/dsh-image-vision/releases/download/v2.7.0/xiaoyuink-dsh-image-vision-2.7.0.tgz
+```
+
+> 装好后想升级也很简单：打开 DSH **设置 → 识图插件**，插件会自动检测 GitHub 上的新版本并**一键更新**，无需再手动改 URL 重装。
+
+**方式二：GitHub 仓库开发模式（`link:`，代码改动重启即生效，适合二次开发）**
+
 ```bash
 # 建议在 ~/.dsh 下新建 plugin 目录，统一存放插件本体
 mkdir -p ~/.dsh/plugin
@@ -42,14 +52,11 @@ git clone https://github.com/xiaoyuink/dsh-image-vision.git
 cd dsh-image-vision
 pnpm install
 
-# 添加到 DSH 配置
+# 添加到 DSH 配置（link: 协议）
 dsh plugin --profile web add "$(pwd)"
-
-# 重启 DSH Web 生效
-# （dsh plugin add 使用 link: 协议，代码改动后重启即可，无需重新安装）
 ```
 
-> **💡 关于插件存放位置**：建议将插件本体放在 `~/.dsh/plugin/` 目录下统一管理，也可以根据你的喜好放在任意位置，`dsh plugin add` 时指向该路径即可。
+> **💡 关于插件存放位置**：开发模式建议将插件本体放在 `~/.dsh/plugin/` 目录下统一管理，也可以根据你的喜好放在任意位置，`dsh plugin add` 时指向该路径即可。
 
 安装完成后重启 `dsh web`，然后按以下步骤开始使用：
 
@@ -225,7 +232,15 @@ dsh plugin --profile web add "$(pwd)"
 
 ## 安装
 
-### 从 GitHub 安装
+### 方式一：一条命令安装 GitHub Release（推荐）
+
+```bash
+dsh plugin --profile web add https://github.com/xiaoyuink/dsh-image-vision/releases/download/v2.7.0/xiaoyuink-dsh-image-vision-2.7.0.tgz
+```
+
+安装后重启 `dsh web` 生效（host 在启动时加载）；后续升级可在设置页**一键在线更新**，无需手动重装。
+
+### 方式二：从 GitHub 仓库开发模式（`link:`，适合二次开发）
 
 ```bash
 git clone https://github.com/xiaoyuink/dsh-image-vision.git
@@ -233,13 +248,7 @@ cd dsh-image-vision && pnpm install   # 安装插件自身依赖
 dsh plugin --profile web add <插件目录绝对路径>
 ```
 
-安装后重启 `dsh web` 生效（host 半在启动时加载）。
-
 > 说明：`dsh plugin add` 使用 `link:` 协议，插件代码改动后重启即可生效，无需重新安装。
-
-### 从 GitHub Release 安装
-
-在 [Releases](https://github.com/xiaoyuink/dsh-image-vision/releases) 下载 `xiaoyuink-dsh-image-vision-<版本>.tgz`，解压后按上述方式 `add` 解压得到的 `package/` 目录。
 
 ## 配置数据结构（settings 的 `image-vision` 段）
 
